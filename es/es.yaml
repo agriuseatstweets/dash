@@ -1,0 +1,30 @@
+master:
+  name: master
+  exposeHttp: false
+  replicas: 3
+  heapSize: "512m"
+  persistence:
+    enabled: true
+    accessMode: ReadWriteOnce
+    name: data
+    size: "4Gi"
+    storageClass: europe-bcd
+
+
+data:
+  name: data
+  exposeHttp: false
+  replicas: 3
+  heapSize: "2048m"
+  persistence:
+    enabled: true
+    accessMode: ReadWriteOnce
+    name: data
+    size: "60Gi"
+    storageClass: europe-bcd
+  resources:
+    limits:
+      cpu: "1"
+    requests:
+      cpu: "100m"
+      memory: "2048Mi"

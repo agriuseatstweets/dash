@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: agrius-logstash-pipeline
+  labels:
+    app: agrius-logstash
+data:
+  input.conf: |-
+    input {
+      google_pubsub {
+        project_id => "toixotoixo"
+        topic => "agrius-tweetdash-test"
+        subscription => "agrius-tweetdash-test-logstash"
+        json_key_file => "/usr/share/keys/key.json"
+        create_subscription => false
+      }
+    }
+
+  filter.conf: |-
+    filter {
+      json {
+        source => "message"
+      }
+      date {
+        match => [ "created_at", "EEE MMM dd HH:mm:ss '+0000' yyyy"]
+      }
+      ruby {
+        path => '/usr/share/scripts/prep_tweet.rb'
+      }
+      mutate {
+        remove_field => [ "message", "[user][profile_*]" ]
+      }
+      if "limit" in [tags] {
+        drop {}
+      }
+    }
+
+  output.conf: |-
+    output {
+      elasticsearch {
+        hosts => ["agrius-es-elasticsearch-client.default.svc.cluster.local:9200"]
+        index => "agrius-%{+xxxx.ww}"
+      }
+    }
