@@ -1,0 +1,14 @@
+{
+  "source": {
+    "remote": {
+      "host": "http://agrius-es-elasticsearch-client.default.svc.cluster.local:9200"
+    },
+    "index": "agrius-2019.13",
+    "query": {
+      "match_all": {}
+    }
+  },
+  "dest": {
+    "index": "agrius-2019.13"
+  }
+}
