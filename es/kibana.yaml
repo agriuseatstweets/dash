@@ -1,16 +1,18 @@
-# 150k tweets / GB store size, full tweet --> this is maybe wrong? 75k? Not replicated? 
-# 220k tweets / DB store size, partial tweet
-
-env: 
-  ELASTICSEARCH_URL: "http://agrius-es-elasticsearch-client.default.svc.cluster.local:9200"
+env:
+  ELASTICSEARCH_URL: "http://agrius-elastic-elasticsearch-client.default.svc.cluster.local:9200"
 
 ingress:
   enabled: true
   hosts:
-    - agrius-dash.nandan.cloud
+    - agrius.nandan.cloud
   annotations:
     certmanager.k8s.io/cluster-issuer: letsencrypt-prod
   tls:
-    - secretName: agrius-dash-cert
-      hosts: 
-        - agrius-dash.nandan.cloud
+    - secretName: agrius-kibana-cert
+      hosts:
+        - agrius.nandan.cloud
+
+files:
+  kibana.yml:
+    elasticsearch:
+      requestTimeout: 60000
