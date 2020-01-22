@@ -10,21 +10,24 @@ master:
     size: "4Gi"
     storageClass: europe-ssd-bcd
 
+cluster:
+  config:
+    reindex.remote.whitelist: "*.cluster.local:*"
 
 data:
   name: data
   exposeHttp: false
-  replicas: 6
-  heapSize: "2048m"
+  replicas: 3
+  heapSize: "4096m"
   persistence:
     enabled: true
     accessMode: ReadWriteOnce
     name: data
-    size: "100Gi"
-    storageClass: europe-ssd-bcd
+    size: "350Gi"
+    storageClass: local-scsi
   resources:
     limits:
       cpu: "1"
     requests:
       cpu: "50m"
-      memory: "2048Mi"
+      memory: "5120Mi"
