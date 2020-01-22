@@ -9,8 +9,8 @@ data:
     input {
       google_pubsub {
         project_id => "toixotoixo"
-        topic => "agrius-tweetdash-test"
-        subscription => "agrius-tweetdash-test-logstash"
+        topic => "agrius-india"
+        subscription => "agrius-india-logstash"
         json_key_file => "/usr/share/keys/key.json"
         create_subscription => false
       }
@@ -28,17 +28,27 @@ data:
         path => '/usr/share/scripts/prep_tweet.rb'
       }
       mutate {
-        remove_field => [ "message", "[user][profile_*]" ]
+        remove_field => [ "message", "extended_entities", "geo", "host", "favorite_count", "favorited", "place", "coordinates", "source", "filter_level", "contributors", "timestamp_ms", "quoted_status_permalink", "quoted_status_id", "quoted_status_id_str" ]
       }
-      if "limit" in [tags] {
+      if "delete" in [tags] {
         drop {}
       }
     }
 
   output.conf: |-
     output {
-      elasticsearch {
-        hosts => ["agrius-es-elasticsearch-client.default.svc.cluster.local:9200"]
-        index => "agrius-%{+xxxx.ww}"
+      if "limit" in [tags] {
+        elasticsearch {
+          hosts => ["agrius-es-elasticsearch-client.default.svc.cluster.local:9200"]
+          index => "agrius-limits"
+        }
+      } else {
+        elasticsearch {
+          hosts => ["agrius-es-elasticsearch-client.default.svc.cluster.local:9200"]
+          document_id => "%{[id]}"
+          index => "agrius-%{+xxxx.ww}"
+          template => "/usr/share/templates/mapping.json"
+        }
       }
+
     }

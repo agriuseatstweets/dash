@@ -1,0 +1,53 @@
+{
+  "template" : "agrius*",
+  "version" : 50001,
+  "settings" : {
+    "index.refresh_interval" : "30s"
+  },
+  "mappings" : {
+    "_default_" :  {
+      "dynamic_templates": [
+        {
+          "strings": {
+            "match_mapping_type": "string",
+            "mapping": {
+              "type": "keyword",
+              "ignore_above": 1024
+            }
+          }
+        }
+      ],
+      "properties": {
+        "text": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 1024
+            }
+          }
+        },
+        "created_at": {
+          "type":   "date",
+          "format": "EEE MMM dd HH:mm:ss Z yyyy"
+        },
+        "retweeted_status.created_at": {
+          "type":   "date",
+          "format": "EEE MMM dd HH:mm:ss Z yyyy"
+        },
+        "quoted_status.created_at": {
+          "type":   "date",
+          "format": "EEE MMM dd HH:mm:ss Z yyyy"
+        },
+        "user.created_at": {
+          "type":   "date",
+          "format": "EEE MMM dd HH:mm:ss Z yyyy"
+        },
+        "retweeted_status.user.created_at": {
+          "type":   "date",
+          "format": "EEE MMM dd HH:mm:ss Z yyyy"
+        }
+      }
+    }
+  }
+}
